@@ -196,6 +196,7 @@ int is_port_open(const char *target, int port)
 
   close(sock);
 #endif
+  printf("Checking port %d...\n", port);
 
   return 0; // Port is closed or error occurred
 }

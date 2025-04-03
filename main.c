@@ -6,14 +6,16 @@
  * and initiates the port scanning process.
  */
 
-#include <stdio.h>  // For input/output functions like printf
-#include <stdlib.h> // For utility functions like atoi (ASCII to integer)
+#include <stdio.h>           // For input/output functions like printf
+#include <stdlib.h>          // For utility functions like atoi (ASCII to integer)
+#include "include/scanner.h" // Our custom scanner functionality
+#include "include/config.h"  // Configuration constants
+#include "include/ui.h"      // User interface functions
+
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #endif
-#include "include/scanner.h" // Our custom scanner functionality
-#include "include/config.h"  // Configuration constants
 
 /**
  * Main function - Entry point of the program
@@ -34,31 +36,23 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  // Print welcome message
-  printf("Port Scanner v0.1\n");
-  printf("=================\n\n");
-
-  // Check if we have at least one argument (the target host)
+  // If no arguments provided, show banner and usage
   if (argc < 2)
   {
-    // If not, print usage instructions and exit
-    printf("Usage: %s <target_host> [start_port] [end_port]\n", argv[0]);
+    show_banner();
+    show_usage(argv[0]);
     return 1; // Return non-zero to indicate error
   }
 
   // Parse command line arguments
-  char *target = argv[1]; // First argument is the target host
-
-  // If start_port is provided, use it; otherwise use the default
+  char *target = argv[1];
   int start_port = (argc > 2) ? atoi(argv[2]) : DEFAULT_START_PORT;
-
-  // If end_port is provided, use it; otherwise use the default
   int end_port = (argc > 3) ? atoi(argv[3]) : DEFAULT_END_PORT;
 
-  // Inform the user about the scan parameters
-  printf("Scanning %s from port %d to %d...\n\n", target, start_port, end_port);
+  // Show scanning information
+  show_scanning_header(target, start_port, end_port);
 
-  // Call the function that performs the actual port scanning
+  // Perform the scan
   scan_ports(target, start_port, end_port);
 
 #ifdef _WIN32

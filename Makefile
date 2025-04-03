@@ -11,17 +11,21 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Source files
-SRCS = main.c src/scanner.c src/utils.c src/config.c
+SRCS = main.c src/scanner.c src/utils.c src/config.c src/ui.c
 
 # Object files (automatically generated from source files)
 OBJS = $(SRCS:.c=.o)
 
 # Name of the executable
-TARGET = port_scanner
+TARGET = neptunescan
 
-# Add Windows-specific flags
+# Add Windows-specific flags and commands
 ifeq ($(OS),Windows_NT)
     LDFLAGS += -lws2_32
+    RM = del /Q
+    TARGET := $(TARGET).exe
+else
+    RM = rm -f
 endif
 
 # Default target
@@ -37,7 +41,7 @@ $(TARGET): $(OBJS)
 
 # Clean target to remove compiled files
 clean:
-	rm -f $(OBJS) $(TARGET)
+	$(RM) $(subst /,\,$(OBJS)) $(TARGET)
 
 # Run target to build and execute the program
 run: $(TARGET)
