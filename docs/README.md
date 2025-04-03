@@ -1,122 +1,96 @@
-# 🌊 Neptune Port Scanner
+# 🌊 Neptune Scanner v3.0.0 🌊
 
-A high-performance network port scanner written in C, designed to be fast, efficient, and user-friendly.
+A powerful and efficient network port scanner written in C, inspired by Nmap.
 
 ## 🚀 Features
 
-- Fast TCP port scanning
-- Common ports scanning mode
-- Service detection and identification
-- Cross-platform compatibility (Windows, Linux, macOS)
-- Clean and informative output format
-- Customizable port ranges
-- Non-blocking operations for efficient scanning
-- Robust error handling
-
-## 📋 Prerequisites
-
-- GCC compiler (MinGW for Windows)
-- Make build system
-- Git (for cloning)
+- 🎯 Multiple scanning techniques:
+  - TCP Connect Scan
+  - SYN Scan
+  - FIN Scan
+  - XMAS Scan
+  - NULL Scan
+  - ACK Scan
+  - Window Scan
+  - Maimon Scan
+- ⚡ High-performance parallel scanning
+- 🎨 Beautiful ASCII art banners
+- 🖥️ Cross-platform support (Windows & Linux)
+- 📊 Service detection and version scanning
+- 🎭 OS detection capabilities
+- 🎮 Interactive command-line interface
+- 📝 Detailed scan reports
 
 ## 🛠️ Installation
 
+### Windows
+
 ```bash
-# Clone the repository
-git clone https://github.com/kiwiteaorion/port-scanner.git
-
-# Navigate to the project directory
-cd port-scanner
-
-# Compile the project
+git clone https://github.com/kiwiteaorion/Port-Scanner.git
+cd Port-Scanner
 make
 ```
 
-## 🎯 Usage
+### Linux
 
 ```bash
-# Scan common ports on a target
-./neptunescan <target>
-
-# Scan a specific port range
-./neptunescan <target> <start_port> <end_port>
-
-# Examples:
-./neptunescan localhost              # Scan common ports on localhost
-./neptunescan example.com 80 443    # Scan ports 80-443 on example.com
-./neptunescan 192.168.1.1 22        # Scan only port 22 on 192.168.1.1
+git clone https://github.com/kiwiteaorion/Port-Scanner.git
+cd Port-Scanner
+make
 ```
 
-## 📚 Versions
+## 📋 Usage
 
-### v1.2 (Current)
-
-- Added common ports scanning mode
-- Improved output format with service detection
-- Enhanced user interface
-- Better cross-platform compatibility
-
-### v1.1
-
-- Renamed executable to neptunescan
-- Added ASCII art banner
-- Improved cross-platform compatibility
-
-To use a specific version:
+Basic usage:
 
 ```bash
-# Clone the repository
-git clone https://github.com/kiwiteaorion/port-scanner.git
-
-# For version 1.2 (current)
-git checkout v1.2
-
-# For version 1.1
-git checkout v1.1
+neptunescan [options] <target> [port-range]
 ```
 
-## 🔍 Output Example
-
-## 🧪 Testing
-
-The project includes several test targets:
+Examples:
 
 ```bash
-make test-local  # Test localhost
-make test-web    # Test web server
-make test-range  # Test port range
+# Scan common ports
+neptunescan example.com
+
+# Scan specific port range
+neptunescan example.com 20-80
+
+# Perform SYN scan
+neptunescan -sS example.com
+
+# Service version detection
+neptunescan -sV example.com
+
+# OS detection
+neptunescan -O example.com
 ```
 
-## 📁 Project Structure
+## 🎨 Banners
+
+Neptune Scanner includes several ASCII art banners that are randomly displayed:
 
 ```
-port-scanner/
-├── src/
-│   ├── scanner.c
-│   ├── utils.c
-│   └── config.c
-├── include/
-│   ├── scanner.h
-│   ├── utils.h
-│   └── config.h
-├── main.c
-├── Makefile
-└── README.md
+    _   __      __  __  ___  ____  ____  ____  ____  ____  ____
+   / | / /___  / /_/ / / _ \/ __ \/ __ \/ __ \/ __ \/ __ \/ __ \
+  /  |/ / __ \/ __/ / /  __/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ /
+ / /|  / /_/ / /_/ / /\___/\____/\____/\____/\____/\____/\____/
+/_/ |_/\____/\__/_/ /
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Feel free to submit pull requests or open issues.
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the LICENSE file for details.
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
+## 🤝 Contributing
 
-- **kiwiteaorion**
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-## 🙏 Acknowledgments
+## 📞 Support
 
-- Thanks to all contributors and users of Neptune Port Scanner
-- Inspired by tools like Nmap and other network scanning utilities
+For support, please open an issue in the GitHub repository.
+
+## 🎉 Acknowledgments
+
+- Inspired by Nmap
+- ASCII art generated using patorjk.com
