@@ -80,25 +80,17 @@ port-scanner/
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Feel free to submit pull requests or open issues.
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 👤 Author
 
-**kiwiteaorion**
+- **kiwiteaorion**
 
-- GitHub: [@kiwiteaorion](https://github.com/kiwiteaorion)
+## 🙏 Acknowledgments
 
-## 🌟 Acknowledgments
-
-- Thanks to all contributors who help improve this project
-- Inspired by classic network security tools (mostly nmap)
+- Thanks to all contributors and users of Neptune Port Scanner
+- Inspired by tools like Nmap and other network scanning utilities
