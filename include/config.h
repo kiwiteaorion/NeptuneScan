@@ -16,4 +16,13 @@
 // Network operation settings
 #define CONNECT_TIMEOUT 1 // Timeout in seconds for connection attempts
 
+// Maximum number of common ports to scan
+#define MAX_COMMON_PORTS 50
+
+// Common ports to scan when no range is specified
+extern const int COMMON_PORTS_TO_SCAN[MAX_COMMON_PORTS];
+
+// Flag to indicate whether to use common ports or a full range
+extern int use_common_ports;
+
 #endif /* CONFIG_H */ // End of include guard

@@ -26,6 +26,125 @@
 
 #include "../include/scanner.h"
 #include "../include/config.h"
+#include "../include/utils.h"
+
+// Array of common services for port identification
+typedef struct
+{
+  int port;
+  const char *service;
+  const char *description;
+} PortInfo;
+
+// Common port information
+static const PortInfo PORT_INFO[] = {
+    {20, "FTP-DATA", "File Transfer Protocol (Data)"},
+    {21, "FTP", "File Transfer Protocol (Control)"},
+    {22, "SSH", "Secure Shell"},
+    {23, "TELNET", "Telnet protocol"},
+    {25, "SMTP", "Simple Mail Transfer Protocol"},
+    {53, "DNS", "Domain Name System"},
+    {80, "HTTP", "Hypertext Transfer Protocol"},
+    {110, "POP3", "Post Office Protocol v3"},
+    {143, "IMAP", "Internet Message Access Protocol"},
+    {443, "HTTPS", "HTTP Secure"},
+    {445, "SMB", "Server Message Block"},
+    {3306, "MYSQL", "MySQL Database"},
+    {3389, "RDP", "Remote Desktop Protocol"},
+    {5432, "POSTGRESQL", "PostgreSQL Database"},
+    {8080, "HTTP-ALT", "Alternative HTTP Port"},
+    // Add more common ports as needed
+    {0, NULL, NULL} // Sentinel value to mark the end of the array
+};
+
+/**
+ * Gets service information for a specific port
+ *
+ * @param port The port number
+ * @return A pointer to the service name or "Unknown" if not found
+ */
+const char *get_service_name(int port)
+{
+  for (int i = 0; PORT_INFO[i].service != NULL; i++)
+  {
+    if (PORT_INFO[i].port == port)
+    {
+      return PORT_INFO[i].service;
+    }
+  }
+  return "Unknown";
+}
+
+/**
+ * Gets service description for a specific port
+ *
+ * @param port The port number
+ * @return A pointer to the service description or "Unknown service" if not found
+ */
+const char *get_service_description(int port)
+{
+  for (int i = 0; PORT_INFO[i].description != NULL; i++)
+  {
+    if (PORT_INFO[i].port == port)
+    {
+      return PORT_INFO[i].description;
+    }
+  }
+  return "Unknown service";
+}
+
+/**
+ * Scans common ports on the specified target host.
+ *
+ * @param target The hostname or IP address to scan
+ * @return The number of open ports found
+ */
+int scan_common_ports(const char *target)
+{
+  int open_count = 0;               // Counter for open ports
+  int open_ports[MAX_COMMON_PORTS]; // Array to store open ports
+
+  printf("Scanning %d common ports on %s...\n\n", MAX_COMMON_PORTS, target);
+
+  // Loop through each common port
+  for (int i = 0; i < MAX_COMMON_PORTS; i++)
+  {
+    int port = COMMON_PORTS_TO_SCAN[i];
+
+    // Check if the current port is open
+    if (is_port_open(target, port))
+    {
+      open_ports[open_count] = port; // Store the open port
+      open_count++;                  // Increment the counter of open ports
+    }
+  }
+
+  // Print results in a nice table format
+  if (open_count > 0)
+  {
+    printf("PORT     STATE   SERVICE    DESCRIPTION\n");
+    printf("-------- ------- ---------- ------------------------------------------\n");
+
+    for (int i = 0; i < open_count; i++)
+    {
+      int port = open_ports[i];
+      printf("%-8d OPEN    %-10s %s\n",
+             port,
+             get_service_name(port),
+             get_service_description(port));
+    }
+  }
+  else
+  {
+    printf("No open ports found.\n");
+  }
+
+  // Print summary
+  printf("\nScan completed: %d open ports found out of %d common ports scanned.\n",
+         open_count, MAX_COMMON_PORTS);
+
+  return open_count;
+}
 
 /**
  * Scans a range of ports on the specified target host.
@@ -37,7 +156,9 @@
  */
 int scan_ports(const char *target, int start_port, int end_port)
 {
-  int open_count = 0; // Counter for open ports
+  int open_count = 0;                          // Counter for open ports
+  int total_ports = end_port - start_port + 1; // Total number of ports to scan
+  int open_ports[1000];                        // Array to store open ports
 
   // Validate port range
   if (start_port < 1 || end_port > 65535 || start_port > end_port)
@@ -46,22 +167,40 @@ int scan_ports(const char *target, int start_port, int end_port)
     return -1;
   }
 
-  printf("Port\tState\n");
-  printf("----\t-----\n");
+  printf("Scanning %d ports on %s...\n\n", total_ports, target);
 
   // Loop through each port in the specified range
   for (int port = start_port; port <= end_port; port++)
   {
-    // Check if the current port is open
     if (is_port_open(target, port))
     {
-      printf("%d\tOPEN\n", port);
-      open_count++; // Increment the counter of open ports
+      open_ports[open_count] = port;
+      open_count++;
     }
   }
 
-  // Print summary
-  printf("\nScan completed: %d open ports found.\n", open_count);
+  // Print results in a nice table format
+  if (open_count > 0)
+  {
+    printf("PORT     STATE   SERVICE    DESCRIPTION\n");
+    printf("-------- ------- ---------- ------------------------------------------\n");
+
+    for (int i = 0; i < open_count; i++)
+    {
+      int port = open_ports[i];
+      printf("%-8d OPEN    %-10s %s\n",
+             port,
+             get_service_name(port),
+             get_service_description(port));
+    }
+  }
+  else
+  {
+    printf("No open ports found.\n");
+  }
+
+  printf("\nScan completed: %d open ports found out of %d ports scanned.\n",
+         open_count, total_ports);
 
   return open_count;
 }
@@ -196,7 +335,6 @@ int is_port_open(const char *target, int port)
 
   close(sock);
 #endif
-  printf("Checking port %d...\n", port);
 
   return 0; // Port is closed or error occurred
 }

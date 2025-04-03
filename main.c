@@ -46,14 +46,24 @@ int main(int argc, char *argv[])
 
   // Parse command line arguments
   char *target = argv[1];
-  int start_port = (argc > 2) ? atoi(argv[2]) : DEFAULT_START_PORT;
-  int end_port = (argc > 3) ? atoi(argv[3]) : DEFAULT_END_PORT;
 
-  // Show scanning information
-  show_scanning_header(target, start_port, end_port);
-
-  // Perform the scan
-  scan_ports(target, start_port, end_port);
+  // Determine if we should use common ports or a specific range
+  if (argc == 2)
+  {
+    // Only target specified, use common ports
+    use_common_ports = 1;
+    show_scanning_header(target, 0, 0);
+    scan_common_ports(target);
+  }
+  else
+  {
+    // Specific port range provided
+    use_common_ports = 0;
+    int start_port = (argc > 2) ? atoi(argv[2]) : DEFAULT_START_PORT;
+    int end_port = (argc > 3) ? atoi(argv[3]) : DEFAULT_END_PORT;
+    show_scanning_header(target, start_port, end_port);
+    scan_ports(target, start_port, end_port);
+  }
 
 #ifdef _WIN32
   // Cleanup Winsock

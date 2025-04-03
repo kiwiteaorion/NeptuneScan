@@ -22,6 +22,17 @@
 int scan_ports(const char *target, int start_port, int end_port);
 
 /**
+ * Scans common ports on the specified target host.
+ *
+ * This function attempts to connect to a predefined list of common ports
+ * on the target host. It reports which ports are open.
+ *
+ * @param target The hostname or IP address to scan
+ * @return The number of open ports found
+ */
+int scan_common_ports(const char *target);
+
+/**
  * Checks if a specific port is open on the target host.
  *
  * This function attempts to establish a TCP connection to the specified port.
