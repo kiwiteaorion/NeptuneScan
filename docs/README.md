@@ -1,55 +1,81 @@
-# 🌐 Cross-Platform Port Scanner
+# 🌊 Neptune Port Scanner
 
-A high-performance, cross-platform network port scanner written in C that automatically adapts to Windows, Linux, and macOS environments.
+A high-performance network port scanner written in C, designed to be fast, efficient, and user-friendly.
 
 ## 🚀 Features
 
-- **Cross-Platform Compatibility**: Seamlessly works on Windows, Linux, and macOS
-- **Non-Blocking Operations**: Efficient asynchronous port scanning
-- **Customizable Port Ranges**: Scan specific port ranges or use default common ports
-- **Error Handling**: Robust error detection and reporting
-- **Clean Code**: Well-documented, maintainable code following best practices
+- Fast TCP port scanning
+- Common ports scanning mode
+- Service detection and identification
+- Cross-platform compatibility (Windows, Linux, macOS)
+- Clean and informative output format
+- Customizable port ranges
+- Non-blocking operations for efficient scanning
+- Robust error handling
+
+## 📋 Prerequisites
+
+- GCC compiler (MinGW for Windows)
+- Make build system
+- Git (for cloning)
 
 ## 🛠️ Installation
 
-### Prerequisites
-
-- GCC compiler or equivalent (MinGW for Windows)
-- Make build system
-- Git for version control
-
-### Building from Source
-
-1. Clone the repository
-   git clone https://github.com/kiwiteaorion/port-scanner.git
-   cd port-scanner
-
-2. Build the project
-
 ```bash
+# Clone the repository
+git clone https://github.com/kiwiteaorion/port-scanner.git
+
+# Navigate to the project directory
+cd port-scanner
+
+# Compile the project
 make
 ```
 
-## 📚 Usage
-
-Basic usage:
+## 🎯 Usage
 
 ```bash
-./port_scanner <target_host> [start_port] [end_port]
+# Scan common ports on a target
+./neptunescan <target>
+
+# Scan a specific port range
+./neptunescan <target> <start_port> <end_port>
+
+# Examples:
+./neptunescan localhost              # Scan common ports on localhost
+./neptunescan example.com 80 443    # Scan ports 80-443 on example.com
+./neptunescan 192.168.1.1 22        # Scan only port 22 on 192.168.1.1
 ```
 
-Examples:
+## 📚 Versions
+
+### v1.2 (Current)
+
+- Added common ports scanning mode
+- Improved output format with service detection
+- Enhanced user interface
+- Better cross-platform compatibility
+
+### v1.1
+
+- Renamed executable to neptunescan
+- Added ASCII art banner
+- Improved cross-platform compatibility
+
+To use a specific version:
 
 ```bash
-# Scan localhost ports 80-100
-./port_scanner localhost 80 100
+# Clone the repository
+git clone https://github.com/kiwiteaorion/port-scanner.git
 
-# Scan specific host with default port range
-./port_scanner www.example.com
+# For version 1.2 (current)
+git checkout v1.2
 
-# Scan custom port range
-./port_scanner 192.168.1.1 20 25
+# For version 1.1
+git checkout v1.1
 ```
+
+## 🔍 Output Example
 
 ## 🧪 Testing
 
@@ -80,25 +106,17 @@ port-scanner/
 
 ## 🤝 Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
+Contributions are welcome! Feel free to submit pull requests or open issues.
 
 ## 📝 License
 
-This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
+This project is licensed under the MIT License - see the LICENSE file for details.
 
 ## 👤 Author
 
-**kiwiteaorion**
+- **kiwiteaorion**
 
-- GitHub: [@kiwiteaorion](https://github.com/kiwiteaorion)
+## 🙏 Acknowledgments
 
-## 🌟 Acknowledgments
-
-- Thanks to all contributors who help improve this project
-- Inspired by classic network security tools (mostly nmap)
+- Thanks to all contributors and users of Neptune Port Scanner
+- Inspired by tools like Nmap and other network scanning utilities
