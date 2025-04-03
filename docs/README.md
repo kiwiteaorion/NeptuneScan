@@ -1,6 +1,6 @@
-# Neptune Scanner v2.0
+# 🌊 Neptune Scanner v2.0
 
-A high-performance network port scanner written in C, inspired by Nmap.
+A high-performance network port scanner written in C, designed to be fast, efficient, and user-friendly. Inspired by Nmap.
 
 ## Features
 
@@ -17,25 +17,31 @@ A high-performance network port scanner written in C, inspired by Nmap.
   - Non-blocking socket connections
   - Configurable timeouts
   - Verbose output mode
+  - Service detection and identification
+  - Robust error handling
 - **Cross-Platform**: Works on both Windows and Unix-like systems
 
-## Installation
+## 📋 Prerequisites
 
-### Prerequisites
-
-- GCC compiler
-- Make
+- GCC compiler (MinGW for Windows)
+- Make build system
 - pthread library
+- Git (for cloning)
 
-### Building from Source
+## 🛠️ Installation
 
 ```bash
-git clone https://github.com/yourusername/neptune-scanner.git
+# Clone the repository
+git clone https://github.com/kiwiteaorion/neptune-scanner.git
+
+# Navigate to the project directory
 cd neptune-scanner
+
+# Compile the project
 make
 ```
 
-## Usage
+## 🎯 Usage
 
 Basic usage:
 
@@ -76,15 +82,51 @@ Neptune Scanner v2.0 introduces significant performance improvements:
 - Optimized connection handling
 - Reduced scan times by up to 90% compared to v1.x
 
+## 📚 Version History
+
+### v2.0 (Current)
+
+- Major performance improvements with parallel scanning
+- Added multiple scan types (SYN, Connect, UDP)
+- Enhanced command-line interface
+- Improved error handling and timeout management
+
+### v1.2
+
+- Added common ports scanning mode
+- Improved output format with service detection
+- Enhanced user interface
+- Better cross-platform compatibility
+
+### v1.1
+
+- Renamed executable to neptunescan
+- Added ASCII art banner
+- Improved cross-platform compatibility
+
+## 🧪 Testing
+
+The project includes several test targets:
+
+```bash
+make test-local    # Test on localhost
+make test-web      # Test on web server
+make test-range    # Test specific port range
+```
+
 ## Contributing
 
-Contributions are welcome! Please feel free to submit a Pull Request.
+Contributions are welcome! Feel free to submit pull requests or open issues.
 
 ## License
 
 This project is licensed under the MIT License - see the LICENSE file for details.
 
-## Acknowledgments
+## 👤 Author
 
-- Inspired by Nmap
-- Created by kiwiteaorion
+- **kiwiteaorion**
+
+## 🙏 Acknowledgments
+
+- Thanks to all contributors and users of Neptune Scanner
+- Inspired by tools like Nmap and other network scanning utilities
