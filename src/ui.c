@@ -21,7 +21,7 @@ void show_banner()
   printf("            | |                                                 \n");
   printf("            |_|                                                 \n");
   printf("\n");
-  printf("                   Neptune Port Scanner v1.0\n");
+  printf("                   Neptune Port Scanner v2.0\n");
   printf("              A high-performance network scanner\n");
   printf("                  Created by kiwiteaorion\n");
   printf("\n");

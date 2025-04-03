@@ -1,18 +1,18 @@
 /**
- * Port Scanner - A simple network port scanner
- * scanner.c - Scanner functionality implementation
- *
- * This file implements the functions for scanning ports on a target host.
+ * Neptune Scanner - Network Port Scanner
+ * scanner.c - Implementation of scanning functionality
  */
 
-#include <stdio.h>  // For input/output functions
-#include <string.h> // For string manipulation functions
+#include <stdio.h>
+#include <stdlib.h>
+#include <string.h>
+#include <pthread.h>
 
 #ifdef _WIN32
 #include <winsock2.h>
 #include <ws2tcpip.h>
 #include <windows.h>
-// Windows doesn't need these headers
+#define close closesocket
 #else
 #include <sys/socket.h>
 #include <netinet/in.h>
@@ -21,7 +21,6 @@
 #include <unistd.h>
 #include <fcntl.h>
 #include <errno.h>
-#include <sys/time.h>
 #endif
 
 #include "../include/scanner.h"
@@ -146,63 +145,148 @@ int scan_common_ports(const char *target)
   return open_count;
 }
 
-/**
- * Scans a range of ports on the specified target host.
- *
- * @param target The hostname or IP address to scan
- * @param start_port The first port to scan
- * @param end_port The last port to scan
- * @return The number of open ports found
- */
+// Thread arguments structure
+typedef struct
+{
+  const char *target;
+  int port;
+  int *result;
+  int timeout;
+} scan_thread_args_t;
+
+// Function to set socket to non-blocking mode
+static int set_nonblocking(int sockfd)
+{
+#ifdef _WIN32
+  unsigned long mode = 1;
+  return ioctlsocket(sockfd, FIONBIO, &mode);
+#else
+  int flags = fcntl(sockfd, F_GETFL, 0);
+  if (flags == -1)
+    return -1;
+  return fcntl(sockfd, F_SETFL, flags | O_NONBLOCK);
+#endif
+}
+
+// Thread function to scan a single port
+void *scan_port_thread(void *arg)
+{
+  scan_thread_args_t *args = (scan_thread_args_t *)arg;
+  struct sockaddr_in addr;
+  int sockfd;
+  int result = 0;
+
+  // Create socket
+  sockfd = socket(AF_INET, SOCK_STREAM, 0);
+  if (sockfd < 0)
+  {
+    *args->result = 0;
+    return NULL;
+  }
+
+  // Set non-blocking mode
+  if (set_nonblocking(sockfd) < 0)
+  {
+    close(sockfd);
+    *args->result = 0;
+    return NULL;
+  }
+
+  // Setup address structure
+  memset(&addr, 0, sizeof(addr));
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(args->port);
+
+  // Resolve hostname if needed
+  struct hostent *he = gethostbyname(args->target);
+  if (he == NULL)
+  {
+    close(sockfd);
+    *args->result = 0;
+    return NULL;
+  }
+  memcpy(&addr.sin_addr, he->h_addr_list[0], he->h_length);
+
+  // Attempt connection
+  if (connect(sockfd, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+  {
+#ifdef _WIN32
+    if (WSAGetLastError() != WSAEWOULDBLOCK)
+    {
+#else
+    if (errno != EINPROGRESS)
+    {
+#endif
+      close(sockfd);
+      *args->result = 0;
+      return NULL;
+    }
+  }
+
+  // Setup select for timeout
+  fd_set fdset;
+  struct timeval tv;
+  FD_ZERO(&fdset);
+  FD_SET(sockfd, &fdset);
+  tv.tv_sec = args->timeout / 1000;
+  tv.tv_usec = (args->timeout % 1000) * 1000;
+
+  // Wait for connection or timeout
+  if (select(sockfd + 1, NULL, &fdset, NULL, &tv) > 0)
+  {
+    int so_error;
+    socklen_t len = sizeof(so_error);
+#ifdef _WIN32
+    char optval[4];
+    getsockopt(sockfd, SOL_SOCKET, SO_ERROR, optval, &len);
+    so_error = *(int *)optval;
+#else
+    getsockopt(sockfd, SOL_SOCKET, SO_ERROR, &so_error, &len);
+#endif
+    if (so_error == 0)
+    {
+      result = 1;
+    }
+  }
+
+  close(sockfd);
+  *args->result = result;
+  return NULL;
+}
+
 int scan_ports(const char *target, int start_port, int end_port)
 {
-  int open_count = 0;                          // Counter for open ports
-  int total_ports = end_port - start_port + 1; // Total number of ports to scan
-  int open_ports[1000];                        // Array to store open ports
+  int num_ports = end_port - start_port + 1;
+  int *results = (int *)calloc(num_ports, sizeof(int));
+  pthread_t *threads = (pthread_t *)malloc(num_ports * sizeof(pthread_t));
+  scan_thread_args_t *args = (scan_thread_args_t *)malloc(num_ports * sizeof(scan_thread_args_t));
+  int open_ports = 0;
 
-  // Validate port range
-  if (start_port < 1 || end_port > 65535 || start_port > end_port)
+  // Create threads for each port
+  for (int i = 0; i < num_ports; i++)
   {
-    printf("Error: Invalid port range. Valid ports are 1-65535.\n");
-    return -1;
+    args[i].target = target;
+    args[i].port = start_port + i;
+    args[i].result = &results[i];
+    args[i].timeout = DEFAULT_TIMEOUT;
+    pthread_create(&threads[i], NULL, scan_port_thread, &args[i]);
   }
 
-  printf("Scanning %d ports on %s...\n\n", total_ports, target);
-
-  // Loop through each port in the specified range
-  for (int port = start_port; port <= end_port; port++)
+  // Wait for all threads to complete
+  for (int i = 0; i < num_ports; i++)
   {
-    if (is_port_open(target, port))
+    pthread_join(threads[i], NULL);
+    if (results[i])
     {
-      open_ports[open_count] = port;
-      open_count++;
+      printf("Port %d is open\n", start_port + i);
+      open_ports++;
     }
   }
 
-  // Print results in a nice table format
-  if (open_count > 0)
-  {
-    printf("PORT     STATE   SERVICE    DESCRIPTION\n");
-    printf("-------- ------- ---------- ------------------------------------------\n");
-
-    for (int i = 0; i < open_count; i++)
-    {
-      int port = open_ports[i];
-      printf("%-8d OPEN    %-10s %s\n",
-             port,
-             get_service_name(port),
-             get_service_description(port));
-    }
-  }
-  else
-  {
-    printf("No open ports found.\n");
-  }
-
-  printf("\nScan completed: %d open ports found out of %d ports scanned.\n",
-         open_count, total_ports);
-
-  return open_count;
+  free(results);
+  free(threads);
+  free(args);
+  return open_ports;
 }
 
 /**

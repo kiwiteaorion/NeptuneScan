@@ -1,5 +1,5 @@
 /**
- * Port Scanner - A simple network port scanner
+ * Neptune Scanner - Network Port Scanner
  * scanner.h - Scanner functionality declarations
  *
  * This header file declares the functions related to port scanning.
@@ -8,8 +8,13 @@
 #ifndef SCANNER_H // Include guard to prevent multiple inclusion
 #define SCANNER_H
 
+#include <stdbool.h>
+
+// Default timeout in milliseconds
+#define DEFAULT_TIMEOUT 1000
+
 /**
- * Scans a range of ports on the specified target host.
+ * Scans a range of ports on the specified target host using parallel threads.
  *
  * This function attempts to connect to each port in the specified range
  * on the target host. It reports which ports are open.
@@ -43,5 +48,21 @@ int scan_common_ports(const char *target);
  * @return 1 if the port is open, 0 if closed or error
  */
 int is_port_open(const char *target, int port);
+
+/**
+ * Gets the service name for a given port number.
+ *
+ * @param port The port number
+ * @return A string containing the service name
+ */
+const char *get_service_name(int port);
+
+/**
+ * Gets the service description for a given port number.
+ *
+ * @param port The port number
+ * @return A string containing the service description
+ */
+const char *get_service_description(int port);
 
 #endif /* SCANNER_H */ // End of include guard

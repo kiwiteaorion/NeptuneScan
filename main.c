@@ -1,5 +1,5 @@
 /**
- * Port Scanner - A simple network port scanner
+ * Neptune Scanner - A network port scanner
  * main.c - Entry point for the application
  *
  * This file contains the main function that parses command line arguments
@@ -11,6 +11,7 @@
 #include "include/scanner.h" // Our custom scanner functionality
 #include "include/config.h"  // Configuration constants
 #include "include/ui.h"      // User interface functions
+#include "include/args.h"    // Argument parsing functionality
 
 #ifdef _WIN32
 #include <winsock2.h>
@@ -36,33 +37,26 @@ int main(int argc, char *argv[])
   }
 #endif
 
-  // If no arguments provided, show banner and usage
-  if (argc < 2)
+  // Parse command line arguments
+  scan_config_t config;
+  if (parse_args(argc, argv, &config) != 0)
   {
-    show_banner();
-    show_usage(argv[0]);
-    return 1; // Return non-zero to indicate error
+    return 1;
   }
 
-  // Parse command line arguments
-  char *target = argv[1];
+  // Show banner
+  show_banner();
 
-  // Determine if we should use common ports or a specific range
-  if (argc == 2)
+  // Perform the scan based on configuration
+  if (config.use_common_ports)
   {
-    // Only target specified, use common ports
-    use_common_ports = 1;
-    show_scanning_header(target, 0, 0);
-    scan_common_ports(target);
+    show_scanning_header(config.target, 0, 0);
+    scan_common_ports(config.target);
   }
   else
   {
-    // Specific port range provided
-    use_common_ports = 0;
-    int start_port = (argc > 2) ? atoi(argv[2]) : DEFAULT_START_PORT;
-    int end_port = (argc > 3) ? atoi(argv[3]) : DEFAULT_END_PORT;
-    show_scanning_header(target, start_port, end_port);
-    scan_ports(target, start_port, end_port);
+    show_scanning_header(config.target, config.start_port, config.end_port);
+    scan_ports(config.target, config.start_port, config.end_port);
   }
 
 #ifdef _WIN32
@@ -70,5 +64,5 @@ int main(int argc, char *argv[])
   WSACleanup();
 #endif
 
-  return 0; // Return zero to indicate success
+  return 0;
 }

@@ -1,4 +1,4 @@
-# Port Scanner - A simple network port scanner
+# Neptune Scanner - A network port scanner
 # Makefile - Build configuration
 
 # Compiler to use
@@ -11,7 +11,7 @@ CC = gcc
 CFLAGS = -Wall -Wextra -g
 
 # Source files
-SRCS = main.c src/scanner.c src/utils.c src/config.c src/ui.c
+SRCS = main.c src/scanner.c src/utils.c src/config.c src/ui.c src/args.c
 
 # Object files (automatically generated from source files)
 OBJS = $(SRCS:.c=.o)
@@ -21,10 +21,11 @@ TARGET = neptunescan
 
 # Add Windows-specific flags and commands
 ifeq ($(OS),Windows_NT)
-    LDFLAGS += -lws2_32
+    LDFLAGS += -lws2_32 -lpthread
     RM = del /Q
     TARGET := $(TARGET).exe
 else
+    LDFLAGS += -lpthread
     RM = rm -f
 endif
 
