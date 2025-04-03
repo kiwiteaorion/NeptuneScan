@@ -7,50 +7,40 @@
 #define ARGS_H
 
 #include <stdbool.h>
-
-// Scan types
-typedef enum
-{
-  SCAN_TCP_SYN,     // TCP SYN scan (stealth)
-  SCAN_TCP_CONNECT, // TCP Connect scan
-  SCAN_UDP,         // UDP scan
-  SCAN_DEFAULT      // Default scan type
-} scan_type_t;
+#include "config.h"
+#include "advanced_scan.h"
 
 // Configuration structure to hold all scan options
 typedef struct
 {
   char *target;          // Target host or IP
-  int start_port;        // Starting port
-  int end_port;          // Ending port
-  bool use_common_ports; // Use common ports list
+  int port_range[2];     // [start_port, end_port]
   scan_type_t scan_type; // Type of scan to perform
+  bool detect_os;        // Enable OS detection
   bool verbose;          // Verbose output
-  bool show_version;     // Show version information
-  bool show_help;        // Show help message
-  int timeout;           // Connection timeout in milliseconds
-} scan_config_t;
+} Args;
 
 /**
- * Parse command line arguments and populate the configuration structure
+ * Parse command line arguments
  *
  * @param argc Number of arguments
  * @param argv Array of argument strings
- * @param config Pointer to configuration structure to populate
- * @return 0 on success, non-zero on error
+ * @param args Pointer to Args structure to fill
+ * @return true if parsing successful, false otherwise
  */
-int parse_args(int argc, char *argv[], scan_config_t *config);
+bool parse_args(int argc, char *argv[], Args *args);
 
 /**
- * Display help message
+ * Print usage information
+ */
+void print_usage(void);
+
+/**
+ * Convert scan type to string
  *
- * @param program_name Name of the program (argv[0])
+ * @param scan_type The scan type to convert
+ * @return String representation of the scan type
  */
-void show_help(const char *program_name);
-
-/**
- * Display version information
- */
-void show_version(void);
+const char *scan_type_to_string(scan_type_t scan_type);
 
 #endif /* ARGS_H */

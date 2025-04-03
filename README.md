@@ -1,132 +1,96 @@
-# 🌊 Neptune Scanner v2.0
+# 🌊 Neptune Scanner v3.0.0 🌊
 
-A high-performance network port scanner written in C, designed to be fast, efficient, and user-friendly. Inspired by Nmap.
+A powerful and efficient network port scanner written in C, inspired by Nmap.
 
-## Features
+## 🚀 Features
 
-- **Blazing Fast Scanning**: Utilizes parallel scanning with multiple threads for maximum performance
-- **Multiple Scan Types**:
-  - TCP SYN scan (stealth)
-  - TCP Connect scan
-  - UDP scan
-- **Flexible Port Selection**:
-  - Scan specific port ranges
-  - Scan common ports
-  - Custom port selection
-- **Advanced Features**:
-  - Non-blocking socket connections
-  - Configurable timeouts
-  - Verbose output mode
-  - Service detection and identification
-  - Robust error handling
-- **Cross-Platform**: Works on both Windows and Unix-like systems
-
-## 📋 Prerequisites
-
-- GCC compiler (MinGW for Windows)
-- Make build system
-- pthread library
-- Git (for cloning)
+- 🎯 Multiple scanning techniques:
+  - TCP Connect Scan
+  - SYN Scan
+  - FIN Scan
+  - XMAS Scan
+  - NULL Scan
+  - ACK Scan
+  - Window Scan
+  - Maimon Scan
+- ⚡ High-performance parallel scanning
+- 🎨 Beautiful ASCII art banners
+- 🖥️ Cross-platform support (Windows & Linux)
+- 📊 Service detection and version scanning
+- 🎭 OS detection capabilities
+- 🎮 Interactive command-line interface
+- 📝 Detailed scan reports
 
 ## 🛠️ Installation
 
+### Windows
+
 ```bash
-# Clone the repository
-git clone https://github.com/kiwiteaorion/neptune-scanner.git
-
-# Navigate to the project directory
+git clone https://github.com/yourusername/neptune-scanner.git
 cd neptune-scanner
-
-# Compile the project
 make
 ```
 
-## 🎯 Usage
+### Linux
+
+```bash
+git clone https://github.com/yourusername/neptune-scanner.git
+cd neptune-scanner
+make
+```
+
+## 📋 Usage
 
 Basic usage:
 
 ```bash
-./neptunescan example.com
+neptunescan [options] <target> [port-range]
 ```
 
-Scan specific port range:
+Examples:
 
 ```bash
-./neptunescan -p 1-1024 example.com
+# Scan common ports
+neptunescan example.com
+
+# Scan specific port range
+neptunescan example.com 20-80
+
+# Perform SYN scan
+neptunescan -sS example.com
+
+# Service version detection
+neptunescan -sV example.com
+
+# OS detection
+neptunescan -O example.com
 ```
 
-Stealth scan with verbose output:
+## 🎨 Banners
 
-```bash
-./neptunescan -sS -v example.com
+Neptune Scanner includes several ASCII art banners that are randomly displayed:
+
+```
+    _   __      __  __  ___  ____  ____  ____  ____  ____  ____
+   / | / /___  / /_/ / / _ \/ __ \/ __ \/ __ \/ __ \/ __ \/ __ \
+  /  |/ / __ \/ __/ / /  __/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ /
+ / /|  / /_/ / /_/ / /\___/\____/\____/\____/\____/\____/\____/
+/_/ |_/\____/\__/_/ /
 ```
 
-### Command Line Options
+## 📝 License
 
-- `-p <port range>`: Specify port range to scan (e.g., 1-1024)
-- `-sS`: TCP SYN scan (stealth)
-- `-sT`: TCP Connect scan
-- `-sU`: UDP scan
-- `-c`: Scan common ports only
-- `-v`: Verbose output
-- `-t <timeout>`: Set timeout in milliseconds
-- `-V`: Show version information
-- `-h`: Show help message
+This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## Performance
+## 🤝 Contributing
 
-Neptune Scanner v2.0 introduces significant performance improvements:
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- Parallel scanning with multiple threads
-- Non-blocking socket connections
-- Optimized connection handling
-- Reduced scan times by up to 90% compared to v1.x
+## 📞 Support
 
-## 📚 Version History
+For support, please open an issue in the GitHub repository.
 
-### v2.0 (Current)
+## 🎉 Acknowledgments
 
-- Major performance improvements with parallel scanning
-- Added multiple scan types (SYN, Connect, UDP)
-- Enhanced command-line interface
-- Improved error handling and timeout management
-
-### v1.2
-
-- Added common ports scanning mode
-- Improved output format with service detection
-- Enhanced user interface
-- Better cross-platform compatibility
-
-### v1.1
-
-- Renamed executable to neptunescan
-- Added ASCII art banner
-- Improved cross-platform compatibility
-
-## 🧪 Testing
-
-The project includes several test targets:
-
-```bash
-make test-local    # Test on localhost
-make test-web      # Test on web server
-make test-range    # Test specific port range
-```
-
-## Contributing
-
-Contributions are welcome! Feel free to submit pull requests or open issues.
-
-## License
-
-This project is licensed under the MIT License - see the LICENSE file for details.
-
-## 👤 Author
-
-- **kiwiteaorion**
-
-## 🙏 Acknowledgments
-
-- Thanks to all contributors and users of Neptune Scanner
-- Inspired by tools like Nmap and other network scanning utilities
+- Inspired by Nmap
+- ASCII art generated using patorjk.com
