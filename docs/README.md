@@ -75,8 +75,6 @@ git checkout v1.2
 git checkout v1.1
 ```
 
-## 🔍 Output Example
-
 ## 🧪 Testing
 
 The project includes several test targets:
