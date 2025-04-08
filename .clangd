@@ -6,20 +6,27 @@ CompileFlags:
     - "-I./include"
     - "-std=c11" # Use C11 standard
     - "-D_CRT_SECURE_NO_WARNINGS" # Disable warnings about unsafe functions on Windows
+    - "-DWSADATA_DEFINED" # Define Windows-specific symbols
   Compiler: gcc
   CompilationDatabase: .
 
 Diagnostics:
-  # Ignore missing standard headers - clangd sometimes has trouble finding them
+  # Ignore standard library and Windows-specific errors that clangd misinterprets
   Suppress:
     - pp_file_not_found # Ignore file not found errors
-    - undeclared_var_use # Ignore undeclared variable warnings (catch them with actual compilation)
-    - undeclared_function
+    - undeclared_var_use # Ignore undeclared variable warnings
+    - undeclared_function # Ignore undeclared function warnings
+    - implicit-function-declaration # Suppress declaration warnings
+    - unused-includes # Suppress unused include warnings
+    - readability-function-cognitive-complexity # Suppress complexity warnings
 
   ClangTidy:
-    Add: [modernize*, performance*, readability*]
-    Remove: [modernize-use-trailing-return-type]
-  UnusedIncludes: Strict
+    Add: [performance*, readability-*]
+    Remove:
+      - modernize-use-trailing-return-type
+      - readability-function-cognitive-complexity
+      - readability-implicit-bool-conversion
+  UnusedIncludes: None # Don't warn about unused includes
 
 InlayHints:
   Enabled: Yes

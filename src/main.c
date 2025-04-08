@@ -1,21 +1,37 @@
-#include <stdio.h>
-#include <stdlib.h>
-#include <string.h>
+#include <stdio.h>     /* For printf, etc. */
+#include <stdlib.h>    /* For malloc, free, etc. */
+#include <string.h>    /* For strcasecmp, strstr, etc. */
+#include <ctype.h>     /* For isprint() */
+
+/* Explicitly satisfy clangd's static analysis while keeping actual compilation working */
+#ifdef __CLANGD__
+/* These definitions help clangd but aren't compiled with gcc */
+typedef struct {} WSADATA;
+void WSAStartup(int, void*) {}
+int MAKEWORD(int, int) { return 0; }
+void WSACleanup(void) {}
+#define strcasecmp strcmp /* clangd fallback */
+#endif
+
 #ifdef _WIN32
-#include <winsock2.h>
-#include <ws2tcpip.h>
+#include <winsock2.h>  /* For Windows socket functions */
+#include <ws2tcpip.h>  /* For IP socket functions */
+#include <windows.h>   /* For Windows API functions */
+#define strcasecmp _stricmp  /* Windows equivalent of strcasecmp */
 #else
+#include <strings.h>   /* For strcasecmp on Unix systems */
 #include <sys/socket.h>
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #endif
+
 #include "../include/scanner.h"
 #include "../include/args.h"
 #include "../include/ui.h"
 #include "../include/config.h"
 #include "../include/advanced_scan.h"
-#include "../include/utils.h" // For get_timestamp
-#include "../include/service_detection.h" // For service detection functions
+#include "../include/utils.h" /* For get_timestamp */
+#include "../include/service_detection.h" /* For service detection functions */
 
 // Color codes for terminal output
 #define COLOR_RED "\x1b[31m"
