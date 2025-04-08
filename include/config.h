@@ -11,6 +11,9 @@
 
 #include <stdbool.h>
 
+// Version information
+#define VERSION "4.0.0"
+
 // Default configuration values
 // #define DEFAULT_TIMEOUT 2000 // Default timeout in milliseconds
 #define MAX_THREADS 10        // Maximum number of scanning threads

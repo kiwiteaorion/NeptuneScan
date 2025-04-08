@@ -218,7 +218,7 @@ bool grab_banner(const char *target, int port, char *banner, size_t banner_size)
 
     closesocket(sock);
     WSACleanup();
-    return false;
+  return false;
 }
 
 /**
@@ -236,9 +236,9 @@ bool detect_service_version(const char *target, int port, char *version, size_t 
     
     // Try to grab a banner from the service
     if (!grab_banner(target, port, banner, sizeof(banner))) {
-        return false;
-    }
-    
+  return false;
+}
+
     // Extract version information from the banner
     // This is service-specific, so we'll need to handle different services
     if (port == 22 && strstr(banner, "SSH")) {
@@ -337,7 +337,7 @@ bool detect_service(const char *host, int port, ServiceInfo *service_info)
   // Initialize service info
   memset(service_info, 0, sizeof(ServiceInfo));
   service_info->port = port;
-  
+
   // Try to grab the banner
   bool banner_grabbed = grab_banner(host, port, service_info->banner, sizeof(service_info->banner));
   
@@ -414,14 +414,14 @@ bool detect_service(const char *host, int port, ServiceInfo *service_info)
   {
     detected = detect_smtp(host, port, service_info);
   }
-  
+
   // If all else fails, try to identify by port number
   if (!detected && service_info->service_name[0] == '\0')
   {
     for (int i = 0; common_services[i].port != 0; i++)
+  {
+    if (common_services[i].port == port)
     {
-      if (common_services[i].port == port)
-      {
         strncpy(service_info->service_name, common_services[i].name, sizeof(service_info->service_name) - 1);
         strncpy(service_info->protocol, "tcp", sizeof(service_info->protocol) - 1);
         detected = true;
@@ -471,9 +471,9 @@ bool detect_http(const char *host, int port, ServiceInfo *service_info)
     memcpy(&addr.sin_addr, he->h_addr_list[0], he->h_length);
   } else {
     // Fall back to treating as IP address if hostname resolution fails
-    addr.sin_family = AF_INET;
-    addr.sin_port = htons(port);
-    addr.sin_addr.s_addr = inet_addr(host);
+  addr.sin_family = AF_INET;
+  addr.sin_port = htons(port);
+  addr.sin_addr.s_addr = inet_addr(host);
   }
 
   // Set a timeout for connection
@@ -793,7 +793,7 @@ void identify_service(ServiceInfo *service_info)
 {
     // Check if we have a banner to work with
     if (service_info == NULL || service_info->banner[0] == '\0') {
-        return;
+    return;
     }
     
     const char *banner = service_info->banner;
@@ -898,7 +898,7 @@ void identify_service(ServiceInfo *service_info)
                 else if (strstr(server_info, "lighttpd"))
                 {
                     strncpy(service_info->service_name, "lighttpd", sizeof(service_info->service_name) - 1);
-                    // Try to extract version
+    // Try to extract version
                     const char *ver_start = strstr(server_info, "lighttpd/");
                     if (ver_start) {
                         ver_start += 9; // Skip "lighttpd/"
@@ -1204,10 +1204,10 @@ void identify_service(ServiceInfo *service_info)
                     }
                     
                     if (j > 0) {
-                        strncpy(service_info->version, version, sizeof(service_info->version) - 1);
-                    }
-                }
-            }
+        strncpy(service_info->version, version, sizeof(service_info->version) - 1);
+      }
+    }
+  }
         } else {
             // Generic extraction of the banner info
             const char *banner_start = banner;
