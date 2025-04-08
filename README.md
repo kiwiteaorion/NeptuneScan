@@ -112,18 +112,6 @@ On Linux, use make:
 make
 ```
 
-## 🎨 Banners
-
-Neptune Scanner includes several ASCII art banners that are randomly displayed:
-
-```
-    _   __      __  __  ___  ____  ____  ____  ____  ____  ____
-   / | / /___  / /_/ / / _ \/ __ \/ __ \/ __ \/ __ \/ __ \/ __ \
-  /  |/ / __ \/ __/ / /  __/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ /
- / /|  / /_/ / /_/ / /\___/\____/\____/\____/\____/\____/\____/
-/_/ |_/\____/\__/_/ /
-```
-
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
