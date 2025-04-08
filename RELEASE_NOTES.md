@@ -1,5 +1,21 @@
 # Neptune Scanner Release Notes
 
+## Version 4.1.0 (2023)
+
+### Improvements
+
+- Enhanced clangd compatibility with special structure definitions
+- Fixed parameter naming for better code readability
+- Improved error suppression in clangd configuration
+- Updated build script to use C11 standard consistently
+
+### Bug Fixes
+
+- Resolved duplicate VERSION definition across files
+- Fixed unused variable warnings in PowerShell build script
+- Added network structure definitions for static analysis
+- Improved parameter names for better static analysis
+
 ## Version 4.0.0 (2023)
 
 ### New Features

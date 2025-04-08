@@ -11,6 +11,7 @@
 #else
 #include <unistd.h>
 #include <sys/socket.h>
+#include <sys/time.h>  /* For struct timeval */
 #include <netinet/in.h>
 #include <arpa/inet.h>
 #include <netdb.h>
@@ -90,7 +91,7 @@ bool grab_banner(const char *target, int port, char *banner, size_t banner_size)
     }
 
     // Set non-blocking mode
-    u_long mode = 1;
+    unsigned long mode = 1;  // Changed from u_long to unsigned long
     if (ioctlsocket(sock, FIONBIO, &mode) != 0) {
         closesocket(sock);
         WSACleanup();
@@ -1272,4 +1273,140 @@ void identify_service(ServiceInfo *service_info)
             }
         }
     }
+}
+
+/**
+ * Detects if a Telnet service is running on the specified port
+ * 
+ * @param target The target host
+ * @param port The port to check
+ * @param service_info Pointer to service info structure to fill
+ * @return true if Telnet service was detected, false otherwise
+ */
+bool detect_telnet(const char *target, int port, ServiceInfo *service_info)
+{
+    // Initialize service info with default values
+    strncpy(service_info->protocol, "TELNET", sizeof(service_info->protocol) - 1);
+    service_info->protocol[sizeof(service_info->protocol) - 1] = '\0';
+    
+    strncpy(service_info->service_name, "Telnet", sizeof(service_info->service_name) - 1);
+    service_info->service_name[sizeof(service_info->service_name) - 1] = '\0';
+    
+    // Create a socket
+    #ifdef _WIN32
+    SOCKET sock = socket(AF_INET, SOCK_STREAM, IPPROTO_TCP);
+    if (sock == INVALID_SOCKET)
+    {
+        #ifdef _DEBUG
+        printf("Socket creation failed, error code: %d\n", WSAGetLastError());
+        #endif
+        return false;
+    }
+    #else
+    int sock = socket(AF_INET, SOCK_STREAM, 0);
+    if (sock < 0)
+    {
+        #ifdef _DEBUG
+        printf("Socket creation failed\n");
+        #endif
+        return false;
+    }
+    #endif
+
+    // Initialize address structure
+    struct sockaddr_in addr;
+    memset(&addr, 0, sizeof(addr));
+    struct hostent *he;
+    
+    // First try to resolve the hostname in case it's not an IP address
+    if ((he = gethostbyname(target)) != NULL) {
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(port);
+        memcpy(&addr.sin_addr, he->h_addr_list[0], he->h_length);
+    } else {
+        // Fall back to treating as IP address if hostname resolution fails
+        addr.sin_family = AF_INET;
+        addr.sin_port = htons(port);
+        addr.sin_addr.s_addr = inet_addr(target);
+    }
+
+    // Set a timeout for connection
+    struct timeval tv;
+    tv.tv_sec = 3;  // 3 seconds connection timeout
+    tv.tv_usec = 0;
+    setsockopt(sock, SOL_SOCKET, SO_SNDTIMEO, (const char*)&tv, sizeof(tv));
+    
+    // Try to connect
+    if (connect(sock, (struct sockaddr *)&addr, sizeof(addr)) < 0)
+    {
+        #ifdef _WIN32
+        #ifdef _DEBUG
+        printf("Connection failed, error code: %d\n", WSAGetLastError());
+        #endif
+        closesocket(sock);
+        #else
+        #ifdef _DEBUG
+        perror("Connection failed");
+        #endif
+        close(sock);
+        #endif
+        return false;
+    }
+    
+    // Set receive timeout
+    setsockopt(sock, SOL_SOCKET, SO_RCVTIMEO, (const char*)&tv, sizeof(tv));
+    
+    // Try to receive the telnet banner
+    char buffer[1024] = {0};
+    int bytes_read;
+    
+    #ifdef _WIN32
+    bytes_read = recv(sock, buffer, sizeof(buffer) - 1, 0);
+    closesocket(sock);
+    #else
+    bytes_read = recv(sock, buffer, sizeof(buffer) - 1, 0);
+    close(sock);
+    #endif
+    
+    if (bytes_read <= 0)
+    {
+        return false;
+    }
+    
+    // Null-terminate the received data
+    buffer[bytes_read] = '\0';
+    
+    // Copy the banner
+    strncpy(service_info->banner, buffer, sizeof(service_info->banner) - 1);
+    service_info->banner[sizeof(service_info->banner) - 1] = '\0';
+    
+    // Try to determine version from banner
+    if (strstr(buffer, "Linux") || strstr(buffer, "Ubuntu") || strstr(buffer, "Debian"))
+    {
+        strncpy(service_info->version, "Linux telnetd", sizeof(service_info->version) - 1);
+    }
+    else if (strstr(buffer, "Windows"))
+    {
+        strncpy(service_info->version, "Windows telnetd", sizeof(service_info->version) - 1);
+    }
+    else if (bytes_read > 0)
+    {
+        // If we couldn't identify specific version but received data,
+        // just extract first line as version
+        char version[32] = {0};
+        int i = 0;
+        while (buffer[i] && buffer[i] != '\r' && buffer[i] != '\n' && i < 31)
+        {
+            version[i] = buffer[i];
+            i++;
+        }
+        
+        if (i > 0)
+        {
+            strncpy(service_info->version, version, sizeof(service_info->version) - 1);
+            service_info->version[sizeof(service_info->version) - 1] = '\0';
+        }
+    }
+    
+    return true;
 }
