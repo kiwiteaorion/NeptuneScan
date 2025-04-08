@@ -1,9 +1,21 @@
 CompileFlags:
-  Add: [-Wall, -Wextra, -g, "-I./include"]
+  Add:
+    - -Wall
+    - -Wextra
+    - -g
+    - "-I./include"
+    - "-std=c11" # Use C11 standard
+    - "-D_CRT_SECURE_NO_WARNINGS" # Disable warnings about unsafe functions on Windows
   Compiler: gcc
   CompilationDatabase: .
 
 Diagnostics:
+  # Ignore missing standard headers - clangd sometimes has trouble finding them
+  Suppress:
+    - pp_file_not_found # Ignore file not found errors
+    - undeclared_var_use # Ignore undeclared variable warnings (catch them with actual compilation)
+    - undeclared_function
+
   ClangTidy:
     Add: [modernize*, performance*, readability*]
     Remove: [modernize-use-trailing-return-type]

@@ -11,6 +11,9 @@ Write-Host "Cleaning previous build..."
 Remove-Item -Path "obj\*.o" -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "neptunescan.exe" -Force -ErrorAction SilentlyContinue
 
+# Define compiler flags
+$compilerFlags = "-Wall -Wextra -g -I./include -std=c11 -D_CRT_SECURE_NO_WARNINGS"
+
 # Compile all source files
 Write-Host "Compiling source files..."
 $sourceFiles = Get-ChildItem -Path "src" -Filter "*.c"
@@ -18,7 +21,7 @@ $compileErrors = 0
 
 foreach ($file in $sourceFiles) {
     $objFile = "obj\" + $file.BaseName + ".o"
-    $command = "gcc -Wall -Wextra -g -I./include -c src/$($file.Name) -o $objFile"
+    $command = "gcc $compilerFlags -c src/$($file.Name) -o $objFile"
     
     Write-Host "Compiling $($file.Name)..."
     $result = Invoke-Expression $command
