@@ -24,7 +24,7 @@ foreach ($file in $sourceFiles) {
     $command = "gcc $compilerFlags -c src/$($file.Name) -o $objFile"
     
     Write-Host "Compiling $($file.Name)..."
-    $result = Invoke-Expression $command
+    Invoke-Expression $command
     
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Error compiling $($file.Name)" -ForegroundColor Red
@@ -42,7 +42,7 @@ if ($compileErrors -gt 0) {
 Write-Host "Linking object files..."
 $objFiles = (Get-ChildItem -Path "obj" -Filter "*.o" | ForEach-Object { "obj\" + $_.Name }) -join " "
 $linkCommand = "gcc $objFiles -o neptunescan.exe -lws2_32 -liphlpapi"
-$result = Invoke-Expression $linkCommand
+Invoke-Expression $linkCommand
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error linking object files" -ForegroundColor Red
