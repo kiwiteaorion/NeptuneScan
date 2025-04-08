@@ -12,7 +12,7 @@
 #include <stdbool.h>
 
 // Version information
-#define VERSION "4.0.0"
+#define VERSION "4.1.0"
 
 // Default configuration values
 // #define DEFAULT_TIMEOUT 2000 // Default timeout in milliseconds

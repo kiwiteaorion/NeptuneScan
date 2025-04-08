@@ -17,8 +17,7 @@
 #define DEFAULT_START_PORT 1
 #define DEFAULT_END_PORT 1024
 
-// Version information
-#define VERSION "3.0.0"
+// Version information is now defined in config.h
 
 void print_usage(void)
 {

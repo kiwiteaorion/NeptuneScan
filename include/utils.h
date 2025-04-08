@@ -20,13 +20,13 @@
 void display_progress_bar(float progress, int width);
 
 // Function to check if a string is a valid IP address
-bool is_valid_ip(const char *ip);
+bool is_valid_ip(const char *ipaddr);
 
 // Function to check if a string is a valid hostname
 bool is_valid_hostname(const char *hostname);
 
 // Function to resolve a hostname to an IP address
-bool resolve_hostname(const char *hostname, char *ip, size_t ip_size);
+bool resolve_hostname(const char *hostname, char *ipaddr, size_t ipaddr_size);
 
 // Function to print a progress bar
 void print_progress(int current, int total);
@@ -41,10 +41,10 @@ long get_timestamp(void);
 bool is_valid_port(int port);
 
 // Function to convert a string to lowercase
-void str_tolower(char *str);
+void str_tolower(char *string);
 
 // Function to trim whitespace from a string
-void str_trim(char *str);
+void str_trim(char *string);
 
 // Function to get the executable name
 const char* get_executable_name(void);

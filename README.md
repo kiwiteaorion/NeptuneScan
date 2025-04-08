@@ -1,4 +1,4 @@
-# 🌊 Neptune Scanner v4.0.0 🌊
+# 🌊 Neptune Scanner v4.1.0 🌊
 
 A powerful and efficient network port scanner written in C, inspired by Nmap.
 

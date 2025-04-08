@@ -11,6 +11,9 @@ Write-Host "Cleaning previous build..."
 Remove-Item -Path "obj\*.o" -Force -ErrorAction SilentlyContinue
 Remove-Item -Path "neptunescan.exe" -Force -ErrorAction SilentlyContinue
 
+# Define compiler flags
+$compilerFlags = "-Wall -Wextra -g -I./include -std=c11 -D_CRT_SECURE_NO_WARNINGS"
+
 # Compile all source files
 Write-Host "Compiling source files..."
 $sourceFiles = Get-ChildItem -Path "src" -Filter "*.c"
@@ -18,10 +21,10 @@ $compileErrors = 0
 
 foreach ($file in $sourceFiles) {
     $objFile = "obj\" + $file.BaseName + ".o"
-    $command = "gcc -Wall -Wextra -g -I./include -c src/$($file.Name) -o $objFile"
+    $command = "gcc $compilerFlags -c src/$($file.Name) -o $objFile"
     
     Write-Host "Compiling $($file.Name)..."
-    $result = Invoke-Expression $command
+    Invoke-Expression $command
     
     if ($LASTEXITCODE -ne 0) {
         Write-Host "Error compiling $($file.Name)" -ForegroundColor Red
@@ -39,7 +42,7 @@ if ($compileErrors -gt 0) {
 Write-Host "Linking object files..."
 $objFiles = (Get-ChildItem -Path "obj" -Filter "*.o" | ForEach-Object { "obj\" + $_.Name }) -join " "
 $linkCommand = "gcc $objFiles -o neptunescan.exe -lws2_32 -liphlpapi"
-$result = Invoke-Expression $linkCommand
+Invoke-Expression $linkCommand
 
 if ($LASTEXITCODE -ne 0) {
     Write-Host "Error linking object files" -ForegroundColor Red
