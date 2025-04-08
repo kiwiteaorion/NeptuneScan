@@ -252,4 +252,11 @@ void str_trim(char *str)
   end[1] = '\0';
 }
 
+// Function to get the executable name
+const char* get_executable_name(void)
+{
+  static const char* executable_name = "neptunescan.exe";
+  return executable_name;
+}
+
 // Utility functions will be added here as the project grows

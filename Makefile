@@ -23,7 +23,7 @@ else
 endif
 
 # Source files
-SRCS = src/main.c src/scanner.c src/args.c src/ui.c src/utils.c src/advanced_scan.c src/config.c src/scan_utils.c
+SRCS = src/main.c src/scanner.c src/args.c src/ui.c src/utils.c src/advanced_scan.c src/config.c src/scan_utils.c src/service_detection.c
 OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 
 # Default target

@@ -13,6 +13,7 @@
 #include "../include/config.h"
 #include "../include/utils.h"
 #include "../include/scanner.h"
+#include "../include/service_detection.h"
 
 // Color codes for terminal output
 #define COLOR_RED "\x1b[31m"
@@ -23,41 +24,10 @@
 #define COLOR_CYAN "\x1b[36m"
 #define COLOR_RESET "\x1b[0m"
 
-// ASCII art banners
-static const char *banners[] = {
-    "    _   __      __  __  ___  ____  ____  ____  ____  ____  ____ \n"
-    "   / | / /___  / /_/ / / _ \\/ __ \\/ __ \\/ __ \\/ __ \\/ __ \\/ __ \\\n"
-    "  /  |/ / __ \\/ __/ / /  __/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ /\n"
-    " / /|  / /_/ / /_/ / /\\___/\\____/\\____/\\____/\\____/\\____/\\____/ \n"
-    "/_/ |_/\\____/\\__/_/ /                                          \n"
-    "\n"
-    "                    Neptune Scanner v3.0.0\n"
-    "                    ---------------------\n",
-
-    "  _   _                _             _____                      \n"
-    " | \\ | | ___ _ __ ___ | |_ ___ _ __ | ____|_ __  _   _ _ __ ___ \n"
-    " |  \\| |/ _ \\ '_ ` _ \\| __/ _ \\ '_ \\|  _| | '_ \\| | | | '__/ _ \\\n"
-    " | |\\  |  __/ | | | | | ||  __/ |_) | |___| | | | |_| | | |  __/\n"
-    " |_| \\_|\\___|_| |_| |_|\\__\\___| .__/|_____|_| |_|\\__,_|_|  \\___|\n"
-    "                               |_|                                \n"
-    "\n"
-    "                    Neptune Scanner v3.0.0\n"
-    "                    ---------------------\n",
-
-    "  _   _           _       _             _____                      \n"
-    " | \\ | | ___ _ __| |_ ___| |_ ___ _ __ | ____|_ __  _   _ _ __ ___ \n"
-    " |  \\| |/ _ \\ '_ \\ __/ _ \\ __/ _ \\ '_ \\|  _| | '_ \\| | | | '__/ _ \\\n"
-    " | |\\  |  __/ |_) | ||  __/ ||  __/ |_) | |___| | | | |_| | | |  __/\n"
-    " |_| \\_|\\___| .__/ \\__\\___|\\__\\___| .__/|_____|_| |_|\\__,_|_|  \\___|\n"
-    "             |_|                   |_|                                \n"
-    "\n"
-    "                    Neptune Scanner v3.0.0\n"
-    "                    ---------------------\n"};
-
 // Function to print the program header
 void print_header(void)
 {
-  printf("\n%sNeptune Scanner%s - Advanced Port Scanner\n", COLOR_CYAN, COLOR_RESET);
+  printf("\n%sNeptune Scanner%s\n", COLOR_CYAN, COLOR_RESET);
   printf("==========================================\n\n");
 }
 
@@ -73,10 +43,24 @@ void print_results(const char *target, int *open_ports, int num_ports)
     return;
   }
 
-  printf("Open Ports:\n");
+  // Print header in Nmap-like format
+  printf("PORT     STATE   SERVICE    DESCRIPTION\n");
+  printf("----     -----   -------    -----------\n");
+  
+  // Print each open port with its service information in tabular format
   for (int i = 0; i < num_ports; i++)
   {
-    printf("  %d\n", open_ports[i]);
+    int port = open_ports[i];
+    const char *service_name = get_service_name(port);
+    const char *service_desc = get_service_description(port);
+    
+    // Format similar to Nmap output
+    printf("%-8d %sOPEN%s    %-10s %s\n",
+           port,
+           COLOR_GREEN,
+           COLOR_RESET,
+           service_name ? service_name : "unknown",
+           service_desc ? service_desc : "Unknown service");
   }
 }
 
@@ -138,7 +122,7 @@ void print_help(void)
 // Function to print version information
 void print_version(void)
 {
-  printf("Neptune Scanner v2.0.0\n");
+  printf("Neptune Scanner v3.0.0\n");
   printf("Copyright (c) 2024\n");
 }
 
@@ -159,7 +143,8 @@ void print_scan_summary(const char *target, int num_ports, long duration)
   printf("=============\n\n");
   printf("Target: %s\n", target);
   printf("Open Ports: %d\n", num_ports);
-  printf("Duration: %s\n", time_str);
+  printf("Scan Duration: %s\n", time_str);
+  printf("Scan completed: %d open ports found.\n", num_ports);
 }
 
 void show_banner()
@@ -174,7 +159,7 @@ void show_banner()
   printf("            | |                                                 \n");
   printf("            |_|                                                 \n");
   printf("\n");
-  printf("                   Neptune Port Scanner v2.0\n");
+  printf("                   Neptune Port Scanner v3.0.0\n");
   printf("              A high-performance network scanner\n");
   printf("                  Created by kiwiteaorion\n");
   printf("\n");
@@ -207,4 +192,82 @@ void show_scanning_header(const char *target, int start_port, int end_port)
   }
 
   printf("================================================================\n\n");
+}
+
+// Function to print scan results with version information
+void print_results_with_versions(const char *target, int *open_ports, ServiceInfo *service_info, int num_ports)
+{
+  printf("\n%sScan Results for %s%s\n", COLOR_GREEN, target, COLOR_RESET);
+  printf("========================\n\n");
+
+  if (num_ports == 0)
+  {
+    printf("No open ports found.\n");
+    return;
+  }
+
+  // Print header in Nmap-like format with version information
+  printf("PORT     STATE   SERVICE         VERSION\n");
+  printf("----     -----   -------         -------\n");
+  
+  // Print each open port with its service and version information
+  for (int i = 0; i < num_ports; i++)
+  {
+    int port = open_ports[i];
+    
+    // Format similar to Nmap output with version info
+    printf("%-8d %sOPEN%s    %-15s", 
+           port,
+           COLOR_GREEN, 
+           COLOR_RESET,
+           service_info[i].service_name[0] ? service_info[i].service_name : 
+               (get_service_name(port) ? get_service_name(port) : "unknown"));
+    
+    // Print version and protocol information if available
+    if (service_info[i].version[0] && service_info[i].protocol[0]) {
+      printf("%s%s%s (%s)\n", 
+             COLOR_CYAN,
+             service_info[i].version,
+             COLOR_RESET,
+             service_info[i].protocol);
+    } 
+    else if (service_info[i].version[0]) {
+      printf("%s%s%s\n", 
+             COLOR_CYAN,
+             service_info[i].version,
+             COLOR_RESET);
+    }
+    else if (service_info[i].protocol[0]) {
+      printf("(%s)\n", service_info[i].protocol);
+    }
+    else {
+      printf("\n");
+    }
+    
+    // Print limited banner information if available (first line only)
+    if (service_info[i].banner[0]) {
+      // Find first newline or limit to first 80 chars
+      char banner_preview[81] = {0};
+      strncpy(banner_preview, service_info[i].banner, 80);
+      
+      // Replace non-printable characters with spaces
+      for (int j = 0; j < 80 && banner_preview[j]; j++) {
+        if (banner_preview[j] < 32 || banner_preview[j] > 126) {
+          banner_preview[j] = ' ';
+        }
+      }
+      
+      // Ensure null termination
+      banner_preview[80] = '\0';
+      
+      // Truncate at first newline
+      char *newline = strchr(banner_preview, '\n');
+      if (newline) *newline = '\0';
+      
+      // Only display if there's meaningful content
+      if (banner_preview[0]) {
+        printf("| %s%s%s\n", COLOR_BLUE, banner_preview, COLOR_RESET);
+      }
+    }
+  }
 }

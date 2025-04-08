@@ -26,16 +26,16 @@ A powerful and efficient network port scanner written in C, inspired by Nmap.
 ### Windows
 
 ```bash
-git clone https://github.com/kiwiteaorion/Port-Scanner.git
-cd Port-Scanner
+git clone https://github.com/kiwiteaorion/neptunescan.git
+cd neptunescan
 make
 ```
 
 ### Linux
 
 ```bash
-git clone https://github.com/kiwiteaorion/Port-Scanner.git
-cd Port-Scanner
+git clone https://github.com/kiwiteaorion/neptunescan.git
+cd neptunescan
 make
 ```
 

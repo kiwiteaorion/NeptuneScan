@@ -46,6 +46,9 @@ void str_tolower(char *str);
 // Function to trim whitespace from a string
 void str_trim(char *str);
 
+// Function to get the executable name
+const char* get_executable_name(void);
+
 // Utility function declarations will be added here as the project grows
 
 #endif /* UTILS_H */ // End of include guard

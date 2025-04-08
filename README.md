@@ -1,4 +1,4 @@
-# 🌊 Neptune Scanner v3.0.0 🌊
+# 🌊 Neptune Scanner v4.0.0 🌊
 
 A powerful and efficient network port scanner written in C, inspired by Nmap.
 
@@ -13,6 +13,10 @@ A powerful and efficient network port scanner written in C, inspired by Nmap.
   - ACK Scan
   - Window Scan
   - Maimon Scan
+- 📝 Flexible port specification:
+  - Port ranges (e.g., 80-443)
+  - Port lists (e.g., 22,80,443,8080)
+  - Common ports scanning
 - ⚡ High-performance parallel scanning
 - 🎨 Beautiful ASCII art banners
 - 🖥️ Cross-platform support (Windows & Linux)
@@ -20,22 +24,23 @@ A powerful and efficient network port scanner written in C, inspired by Nmap.
 - 🎭 OS detection capabilities
 - 🎮 Interactive command-line interface
 - 📝 Detailed scan reports
+- 🔧 Improved development environment with clangd support
 
 ## 🛠️ Installation
 
 ### Windows
 
 ```bash
-git clone https://github.com/yourusername/neptune-scanner.git
-cd neptune-scanner
-make
+git clone https://github.com/kiwiteaorion/neptunescan.git
+cd neptunescan
+.\build.ps1
 ```
 
 ### Linux
 
 ```bash
-git clone https://github.com/yourusername/neptune-scanner.git
-cd neptune-scanner
+git clone https://github.com/kiwiteaorion/neptunescan.git
+cd neptunescan
 make
 ```
 
@@ -54,7 +59,10 @@ Examples:
 neptunescan example.com
 
 # Scan specific port range
-neptunescan example.com 20-80
+neptunescan -p 20-80 example.com
+
+# Scan specific ports
+neptunescan -p 22,80,443 example.com
 
 # Perform SYN scan
 neptunescan -sS example.com
@@ -64,6 +72,24 @@ neptunescan -sV example.com
 
 # OS detection
 neptunescan -O example.com
+```
+
+## 🛠️ Development
+
+Neptune Scanner now supports clangd for improved code intelligence and development experience. See the [CLANGD_SETUP.md](CLANGD_SETUP.md) for setup instructions.
+
+### Building from Source
+
+On Windows, use the PowerShell build script:
+
+```powershell
+.\build.ps1
+```
+
+On Linux, use make:
+
+```bash
+make
 ```
 
 ## 🎨 Banners

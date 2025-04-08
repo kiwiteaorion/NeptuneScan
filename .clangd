@@ -1,0 +1,18 @@
+CompileFlags:
+  Add: [-Wall, -Wextra, -g, "-I./include"]
+  Compiler: gcc
+  CompilationDatabase: .
+
+Diagnostics:
+  ClangTidy:
+    Add: [modernize*, performance*, readability*]
+    Remove: [modernize-use-trailing-return-type]
+  UnusedIncludes: Strict
+
+InlayHints:
+  Enabled: Yes
+  ParameterNames: Yes
+  DeducedTypes: Yes
+
+Hover:
+  ShowAKA: Yes

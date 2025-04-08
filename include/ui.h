@@ -8,9 +8,12 @@
 #ifndef UI_H
 #define UI_H
 
+#pragma once
+
 #include <stdio.h>
 #include <string.h>
 #include <stdbool.h>
+#include "service_detection.h" // For ServiceInfo structure
 
 // Color codes for terminal output
 #define RESET "\033[0m"
@@ -46,6 +49,9 @@ void print_header(void);
 
 // Function to print scan results
 void print_results(const char *target, int *open_ports, int num_ports);
+
+// Function to print scan results with version information
+void print_results_with_versions(const char *target, int *open_ports, ServiceInfo *service_info, int num_ports);
 
 // Function to print service information
 void print_service_info(int port, const char *service_name, const char *service_desc);

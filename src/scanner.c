@@ -203,7 +203,7 @@ const char *get_service_description(int port)
 }
 
 /**
- * Scans common ports on the specified target host.
+ * Scans only common ports on the specified target host.
  *
  * @param target The hostname or IP address to scan
  * @param scan_type The type of scan to perform
@@ -218,7 +218,6 @@ void scan_common_ports(const char *target, scan_type_t scan_type)
     int port = COMMON_PORTS_TO_SCAN[i];
     if (is_port_open(target, port, scan_type))
     {
-      printf("Port %d is open\n", port);
       add_open_port(port);
     }
   }
@@ -389,7 +388,6 @@ void scan_ports(const char *target, int start_port, int end_port, scan_type_t sc
     pthread_join(threads[i], NULL);
     if (results[i] == 1)
     {
-      printf("Port %d is open\n", start_port + i);
       add_open_port(start_port + i);
     }
   }
@@ -397,6 +395,37 @@ void scan_ports(const char *target, int start_port, int end_port, scan_type_t sc
   free(results);
   free(args);
   free(threads);
+}
+
+/**
+ * Scans a single port on the specified target host.
+ *
+ * @param target The hostname or IP address to scan
+ * @param port The port to scan
+ * @param scan_type The type of scan to perform
+ */
+void scan_port(const char *target, int port, scan_type_t scan_type)
+{
+  int result = 0;
+  scan_thread_args_t args;
+  pthread_t thread;
+
+  // Initialize thread arguments
+  args.target = target;
+  args.port = port;
+  args.result = &result;
+  args.timeout = DEFAULT_TIMEOUT;
+  args.scan_type = scan_type;
+
+  // Create thread
+  pthread_create(&thread, NULL, scan_port_thread, &args);
+
+  // Wait for thread to complete
+  pthread_join(thread, NULL);
+  if (result == 1)
+  {
+    add_open_port(port);
+  }
 }
 
 // Function to initialize the scanner

@@ -23,6 +23,7 @@ void cleanup_scanner(void);
 
 // Port scanning functions
 void scan_ports(const char *target, int start_port, int end_port, scan_type_t scan_type);
+void scan_port(const char *target, int port, scan_type_t scan_type);
 void scan_common_ports(const char *target, scan_type_t scan_type);
 int is_port_open(const char *target, int port, scan_type_t scan_type);
 

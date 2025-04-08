@@ -16,6 +16,7 @@
 // Service information structure
 typedef struct
 {
+  int port;              // Port number
   char protocol[32];     // Protocol name (e.g., "HTTP", "FTP")
   char service_name[64]; // Service name (e.g., "Web Server", "File Server")
   char version[32];      // Service version
@@ -27,6 +28,9 @@ const char *get_service_name(int port);
 const char *get_service_description(int port);
 bool grab_banner(const char *target, int port, char *banner, size_t banner_size);
 bool detect_service_version(const char *target, int port, char *version, size_t version_size);
+
+// Main service detection function
+bool detect_service(const char *host, int port, ServiceInfo *service_info);
 
 // Service-specific detection functions
 bool detect_http(const char *target, int port, ServiceInfo *service_info);
