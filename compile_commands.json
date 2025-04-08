@@ -1,0 +1,47 @@
+[
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\main.c -o obj\\main.o",
+    "file": "src\\main.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\scanner.c -o obj\\scanner.o",
+    "file": "src\\scanner.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\args.c -o obj\\args.o",
+    "file": "src\\args.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\ui.c -o obj\\ui.o",
+    "file": "src\\ui.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\utils.c -o obj\\utils.o",
+    "file": "src\\utils.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\advanced_scan.c -o obj\\advanced_scan.o",
+    "file": "src\\advanced_scan.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\config.c -o obj\\config.o",
+    "file": "src\\config.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\scan_utils.c -o obj\\scan_utils.o",
+    "file": "src\\scan_utils.c"
+  },
+  {
+    "directory": "C:\\Users\\Tarik\\OneDrive\\GitHub projekti\\C\\Port Scanner",
+    "command": "gcc -Wall -Wextra -g -I.\\include -c src\\service_detection.c -o obj\\service_detection.o",
+    "file": "src\\service_detection.c"
+  }
+]

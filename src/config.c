@@ -6,9 +6,7 @@
  */
 
 #include "../include/config.h"
-
-// Flag to indicate whether to use common ports or a full range
-int use_common_ports = 1;
+#include <stdbool.h>
 
 // List of common ports to scan by default
 // These are some of the most commonly used ports for various services
@@ -63,3 +61,26 @@ const int COMMON_PORTS_TO_SCAN[MAX_COMMON_PORTS] = {
     50000, // SAP
     51413  // BitTorrent
 };
+
+// Common ports to scan
+const int COMMON_PORTS[COMMON_PORTS_COUNT] = {
+    21,   // FTP
+    22,   // SSH
+    23,   // Telnet
+    25,   // SMTP
+    53,   // DNS
+    80,   // HTTP
+    110,  // POP3
+    143,  // IMAP
+    443,  // HTTPS
+    445,  // SMB
+    3306, // MySQL
+    3389, // RDP
+    5432, // PostgreSQL
+    5900, // VNC
+    8080, // HTTP Proxy
+    8443  // HTTPS Alt
+};
+
+// Global configuration variables
+bool use_common_ports = true; // Default to scanning common ports

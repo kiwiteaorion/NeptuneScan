@@ -1,0 +1,26 @@
+# Build artifacts
+obj/
+*.o
+*.exe
+neptunescan
+
+# IDE specific files
+.vscode/
+.idea/
+*.swp
+*.swo
+
+# OS specific files
+.DS_Store
+Thumbs.db
+
+# Debug files
+*.dSYM/
+*.pdb
+
+# Log files
+*.log
+
+# Temporary files
+*.tmp
+*.temp 

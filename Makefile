@@ -1,47 +1,49 @@
-# Port Scanner - A simple network port scanner
+# Neptune Scanner - A network port scanner
 # Makefile - Build configuration
 
-# Compiler to use
+# Compiler and flags
 CC = gcc
+CFLAGS = -Wall -Wextra -g -I./include
+LDFLAGS = 
 
-# Compiler flags
-# -Wall: Enable all warnings
-# -Wextra: Enable extra warnings
-# -g: Include debugging information
-CFLAGS = -Wall -Wextra -g
+# Detect operating system
+ifeq ($(OS),Windows_NT)
+    LDFLAGS += -lws2_32 -liphlpapi
+    TARGET = neptunescan.exe
+    RM = del /Q /F
+    MKDIR = mkdir
+    OBJ_DIR = obj
+    OBJ_FILES = $(OBJ_DIR)\*.o
+else
+    TARGET = neptunescan
+    RM = rm -f
+    MKDIR = mkdir -p
+    OBJ_DIR = obj
+    OBJ_FILES = $(OBJ_DIR)/*.o
+endif
 
 # Source files
-SRCS = main.c src/scanner.c src/utils.c src/config.c src/ui.c
-
-# Object files (automatically generated from source files)
-OBJS = $(SRCS:.c=.o)
-
-# Name of the executable
-TARGET = neptunescan
-
-# Add Windows-specific flags and commands
-ifeq ($(OS),Windows_NT)
-    LDFLAGS += -lws2_32
-    RM = del /Q
-    TARGET := $(TARGET).exe
-else
-    RM = rm -f
-endif
+SRCS = src/main.c src/scanner.c src/args.c src/ui.c src/utils.c src/advanced_scan.c src/config.c src/scan_utils.c src/service_detection.c
+OBJS = $(SRCS:src/%.c=$(OBJ_DIR)/%.o)
 
 # Default target
 all: $(TARGET)
 
-# Rule to build the executable
-$(TARGET): $(OBJS)
-	$(CC) $(CFLAGS) -o $@ $^ $(LDFLAGS)
+# Create object directory if it doesn't exist
+$(OBJ_DIR):
+	$(MKDIR) $(OBJ_DIR)
 
-# Rule to compile source files into object files
-%.o: %.c
+# Compile source files
+$(OBJ_DIR)/%.o: src/%.c | $(OBJ_DIR)
 	$(CC) $(CFLAGS) -c $< -o $@
 
-# Clean target to remove compiled files
+# Link object files
+$(TARGET): $(OBJS)
+	$(CC) $(OBJS) -o $@ $(LDFLAGS)
+
+# Clean build artifacts
 clean:
-	$(RM) $(subst /,\,$(OBJS)) $(TARGET)
+	$(RM) $(OBJ_FILES) $(TARGET)
 
 # Run target to build and execute the program
 run: $(TARGET)
@@ -57,5 +59,8 @@ test-web: $(TARGET)
 test-range: $(TARGET)
 	./$(TARGET) localhost 20 25
 
+test-services: $(TARGET)
+	./$(TARGET) -sV localhost 20 25
+
 # Phony targets (targets that don't represent files)
-.PHONY: all clean run test-local test-web test-range
+.PHONY: all clean run test-local test-web test-range test-services

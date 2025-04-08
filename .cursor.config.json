@@ -1,0 +1,15 @@
+{
+  "language_server": {
+    "cpp": {
+      "enabled": false,
+      "command": ["clangd"]
+    },
+    "c": {
+      "enabled": false,
+      "command": ["clangd"]
+    }
+  },
+  "extensions": {
+    "disabled": ["ms-vscode.cpptools"]
+  }
+}

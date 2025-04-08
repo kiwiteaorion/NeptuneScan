@@ -1,104 +1,96 @@
-# 🌐 Cross-Platform Port Scanner
+# 🌊 Neptune Scanner v3.0.0 🌊
 
-A high-performance, cross-platform network port scanner written in C that automatically adapts to Windows, Linux, and macOS environments.
+A powerful and efficient network port scanner written in C, inspired by Nmap.
 
 ## 🚀 Features
 
-- **Cross-Platform Compatibility**: Seamlessly works on Windows, Linux, and macOS
-- **Non-Blocking Operations**: Efficient asynchronous port scanning
-- **Customizable Port Ranges**: Scan specific port ranges or use default common ports
-- **Error Handling**: Robust error detection and reporting
-- **Clean Code**: Well-documented, maintainable code following best practices
+- 🎯 Multiple scanning techniques:
+  - TCP Connect Scan
+  - SYN Scan
+  - FIN Scan
+  - XMAS Scan
+  - NULL Scan
+  - ACK Scan
+  - Window Scan
+  - Maimon Scan
+- ⚡ High-performance parallel scanning
+- 🎨 Beautiful ASCII art banners
+- 🖥️ Cross-platform support (Windows & Linux)
+- 📊 Service detection and version scanning
+- 🎭 OS detection capabilities
+- 🎮 Interactive command-line interface
+- 📝 Detailed scan reports
 
 ## 🛠️ Installation
 
-### Prerequisites
-
-- GCC compiler or equivalent (MinGW for Windows)
-- Make build system
-- Git for version control
-
-### Building from Source
-
-1. Clone the repository
-   git clone https://github.com/kiwiteaorion/port-scanner.git
-   cd port-scanner
-
-2. Build the project
+### Windows
 
 ```bash
+git clone https://github.com/kiwiteaorion/neptunescan.git
+cd neptunescan
 make
 ```
 
-## 📚 Usage
+### Linux
+
+```bash
+git clone https://github.com/kiwiteaorion/neptunescan.git
+cd neptunescan
+make
+```
+
+## 📋 Usage
 
 Basic usage:
 
 ```bash
-./port_scanner <target_host> [start_port] [end_port]
+neptunescan [options] <target> [port-range]
 ```
 
 Examples:
 
 ```bash
-# Scan localhost ports 80-100
-./port_scanner localhost 80 100
+# Scan common ports
+neptunescan example.com
 
-# Scan specific host with default port range
-./port_scanner www.example.com
+# Scan specific port range
+neptunescan example.com 20-80
 
-# Scan custom port range
-./port_scanner 192.168.1.1 20 25
+# Perform SYN scan
+neptunescan -sS example.com
+
+# Service version detection
+neptunescan -sV example.com
+
+# OS detection
+neptunescan -O example.com
 ```
 
-## 🧪 Testing
+## 🎨 Banners
 
-The project includes several test targets:
-
-```bash
-make test-local  # Test localhost
-make test-web    # Test web server
-make test-range  # Test port range
-```
-
-## 📁 Project Structure
+Neptune Scanner includes several ASCII art banners that are randomly displayed:
 
 ```
-port-scanner/
-├── src/
-│   ├── scanner.c
-│   ├── utils.c
-│   └── config.c
-├── include/
-│   ├── scanner.h
-│   ├── utils.h
-│   └── config.h
-├── main.c
-├── Makefile
-└── README.md
+    _   __      __  __  ___  ____  ____  ____  ____  ____  ____
+   / | / /___  / /_/ / / _ \/ __ \/ __ \/ __ \/ __ \/ __ \/ __ \
+  /  |/ / __ \/ __/ / /  __/ /_/ / /_/ / /_/ / /_/ / /_/ / /_/ /
+ / /|  / /_/ / /_/ / /\___/\____/\____/\____/\____/\____/\____/
+/_/ |_/\____/\__/_/ /
 ```
-
-## 🤝 Contributing
-
-Contributions are welcome! Please feel free to submit a Pull Request.
-
-1. Fork the repository
-2. Create your feature branch (`git checkout -b feature/AmazingFeature`)
-3. Commit your changes (`git commit -m 'Add some AmazingFeature'`)
-4. Push to the branch (`git push origin feature/AmazingFeature`)
-5. Open a Pull Request
 
 ## 📝 License
 
 This project is licensed under the MIT License - see the [LICENSE](LICENSE) file for details.
 
-## 👤 Author
+## 🤝 Contributing
 
-**kiwiteaorion**
+Contributions are welcome! Please feel free to submit a Pull Request.
 
-- GitHub: [@kiwiteaorion](https://github.com/kiwiteaorion)
+## 📞 Support
 
-## 🌟 Acknowledgments
+For support, please open an issue in the GitHub repository.
 
-- Thanks to all contributors who help improve this project
-- Inspired by classic network security tools (mostly nmap)
+## 🎉 Acknowledgments
+
+- Inspired by Nmap
+- ASCII art generated using patorjk.com
