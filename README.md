@@ -78,6 +78,26 @@ neptunescan -O example.com
 
 Neptune Scanner now supports clangd for improved code intelligence and development experience. See the [CLANGD_SETUP.md](CLANGD_SETUP.md) for setup instructions.
 
+### Why clangd instead of Microsoft C/C++ Extension
+
+We've chosen clangd over Microsoft's C/C++ extension for several key reasons:
+
+1. **Better cross-platform compatibility**: clangd works consistently across Windows, Linux, and macOS, providing the same experience regardless of your development environment.
+
+2. **More accurate code intelligence**: Being built on the Clang compiler frontend, clangd provides more precise code completion, error detection, and type information.
+
+3. **Performance**: clangd offers significantly faster indexing and response times, especially for large codebases.
+
+4. **Integration with GCC/MinGW**: clangd works seamlessly with the GCC toolchain we use for this project, while Microsoft's extension is primarily optimized for MSVC.
+
+5. **Modern features**: clangd supports newer C/C++ standards and language features with better accuracy.
+
+6. **Standardized interface**: Using the Language Server Protocol (LSP), clangd integrates well with various editors beyond just VS Code.
+
+7. **Consistent diagnostics**: Error messages and warnings match what you'll see during actual compilation.
+
+8. **Active development**: clangd is actively maintained by the LLVM community, ensuring it stays up-to-date with the latest C/C++ developments.
+
 ### Building from Source
 
 On Windows, use the PowerShell build script:

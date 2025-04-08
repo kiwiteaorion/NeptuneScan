@@ -1,5 +1,35 @@
 # Setting up clangd for Neptune Scanner in Cursor
 
+## Why We're Using clangd Instead of Microsoft C/C++ Extension
+
+The Microsoft C/C++ extension (ms-vscode.cpptools) is often the default choice for C/C++ development in Visual Studio Code and its derivatives like Cursor. However, we've encountered several limitations with this extension that prompted our switch to clangd:
+
+### Issues with Microsoft C/C++ Extension
+
+1. **Cursor IDE Compatibility**: The Microsoft extension has shown inconsistent behavior in Cursor IDE, often failing to initialize properly (displaying a perpetual "spinning C" icon).
+
+2. **Performance Issues**: The Microsoft extension can be resource-intensive, especially when indexing larger codebases like Neptune Scanner.
+
+3. **MinGW/GCC Support**: While the Microsoft extension does support MinGW/GCC, its primary focus is on MSVC, which can lead to suboptimal behavior with our GCC-based build system.
+
+4. **Configuration Complexity**: Getting the Microsoft extension to correctly recognize all includes and compiler flags has proven challenging in cross-platform development.
+
+### Benefits of clangd
+
+1. **Faster Analysis**: clangd typically processes code more quickly, providing immediate feedback.
+
+2. **Higher Accuracy**: Because clangd is based on the actual Clang compiler frontend, its understanding of the code matches how it will be compiled.
+
+3. **Better Cross-Platform Support**: clangd works consistently across Windows, Linux, and macOS.
+
+4. **More Detailed Diagnostics**: Error messages and warnings are more comprehensive and actionable.
+
+5. **Superior Code Navigation**: Finding references, definitions, and implementing complex refactorings is more reliable.
+
+6. **Standards Compliance**: clangd has excellent support for modern C/C++ standards and features.
+
+By using clangd, we ensure a more consistent, efficient, and accurate development experience across all environments where Neptune Scanner is developed.
+
 ## Install LLVM/clangd
 
 1. Download LLVM from the official website: https://github.com/llvm/llvm-project/releases
